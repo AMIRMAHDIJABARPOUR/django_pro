@@ -21,8 +21,3 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display_links = ["email", "username"]
     list_editable = ["is_active", "is_staff", "is_superuser"]
-    list_display_links = ["email", "username"]
-
-
-user_admin = UserAdmin(User, admin.site)
-admin.site.register(User, user_admin)
