@@ -18,6 +18,9 @@ class Post(models.Model):
         verbose_name = "Post"
         verbose_name_plural = "Posts"
 
+    def get_snippet(self):
+        return self.content[:100] + "..." if len(self.content) > 100 else self.content
+
     def __str__(self):
         return self.title
 
