@@ -16,7 +16,9 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         source="author.username",
         read_only=True,
     )
-
+    category_id = serializers.PrimaryKeyRelatedField(
+        source="category", many=True, queryset=Category.objects.all()
+    )
     category_names = serializers.SlugRelatedField(
         source="category",
         many=True,
@@ -33,7 +35,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             "title",
             "author",
             "author_name",
-            "category",
+            "category_id",
             "category_names",
             "content",
             "created_at",
@@ -63,4 +65,5 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         elif action == "retrieve":
             representation.pop("snippet", None)
             representation.pop("absolute_api_url", None)
+            representation.pop("url", None)
         return representation

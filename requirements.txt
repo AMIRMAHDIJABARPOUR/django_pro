@@ -24,3 +24,5 @@ gunicorn>=21.2
 pytest>=7.4
 pytest-django>=4.7
 drf-spectacular[sidecar]
+django-filter
+drf-yasg
