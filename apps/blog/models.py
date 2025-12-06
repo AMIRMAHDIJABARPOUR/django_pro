@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.utils.text import slugify
 
 User = get_user_model()
 
@@ -30,10 +31,29 @@ class Post(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=256)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
     class Meta:
         verbose_name = "Category"
         ordering = ("name",)
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            # generate slug from name only if slug is not set
+            if not self.slug:
+                base = slugify(self.name)
+                slug = base
+                i = 1
+                # ensure uniqueness (exclude self when updating)
+                while (
+                    Category.objects.filter(slug=slug)
+                    .exclude(pk=getattr(self, "pk", None))
+                    .exists()
+                ):
+                    slug = f"{base}-{i}"
+                    i += 1
+                self.slug = slug
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
